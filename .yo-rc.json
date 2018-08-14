@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Tim Struthoff",
+      "authorEmail": "tim.struthoff@gmail.com",
+      "authorUrl": "tst.works"
+    }
+  }
+}
