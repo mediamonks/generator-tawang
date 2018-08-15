@@ -120,7 +120,7 @@ module.exports = class extends Generator {
             // All tests were successful.
             this.log(successLog('Parsed source map successfully.'))
             this.log(chalk.green('All test completed successfully.\n'))
-            return;
+            return serverHost;
           } else {
             this.log(errorLog('Parsing source map failed'));
           }
@@ -149,9 +149,9 @@ module.exports = class extends Generator {
     // Ask all input questions.
     return this.prompt(prompts).then(async props => {
       this.props = props;
-      let serverHost = await serverHostLoop();
-
-      return serverTestLoop(serverHost);
+      let serverHost = await serverTestLoop(await serverHostLoop());
+      this.props.serverHost = serverHost;
+      return
 
     });
   }
