@@ -3,7 +3,7 @@ const path = require('path');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const fg = require('fast-glob');
+const isDomainName = require('is-domain-name');
 const generatePackageJson = require('./templates/generatePackageJson');
 const generateWebpackBase = require('./templates/generateWebpackBase');
 
@@ -35,17 +35,51 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'authorEmail',
         message: "Author's Email",
-      },
-      {
-        type: 'input',
-        name: 'serverHost',
-        message: 'Tawang Server Hostname',
-      },
+      }
     ];
 
-    return this.prompt(prompts).then(props => {
-      // To access props later use this.props.someAnswer;
+    const serverHostQuestion = {
+      type: 'input',
+      name: 'serverHost',
+      message: 'Tawang Server Hostname'
+    }
+
+    const useInvalidServerHostQuestion = {
+      type: 'confirm',
+      name: 'useInvalid',
+      message: 'This doesn\'t look like a domain name, do you want to use it anyways?'
+    }
+
+    const serverHostLoop = async () => {
+      let serverHost = await this.prompt(serverHostQuestion);
+      console.log(JSON.stringify(serverHost))
+      if (isDomainName(serverHost.serverHost)) {
+        console.log('\nVALID');
+        return;
+      } else {
+        console.log('\nINVALID');
+        let useInvalidPrompt = await this.prompt(useInvalidServerHostQuestion);
+        console.log('\nuseValid: ' + JSON.stringify(useInvalidPrompt));
+        if (useInvalidPrompt.useInvalid) {
+          return
+        } else {
+          return serverHostLoop();
+        }
+      }
+
+    }
+
+    const serverTestLoop = async () => {
+      console.log('testing')
+      return
+    }
+
+    // Ask all input questions.
+    return this.prompt(prompts).then(async props => {
       this.props = props;
+      await serverHostLoop();
+      return serverTestLoop();
+
     });
   }
 
@@ -53,6 +87,8 @@ module.exports = class extends Generator {
     this.fs.copy(this.templatePath('static'), this.destinationPath(''), {
       globOptions: { dot: true },
     });
+
+    this.fs.copy(this.templatePath('tawang-starter.arproj'), this.destinationPath(`${this.props.name}.arproj`));
 
     this.fs.writeJSON(
       this.destinationPath('package.json'),
@@ -80,7 +116,7 @@ module.exports = class extends Generator {
         this.props.serverHost
       }" to the whitelisted domains in the AR Studio project properties.\n`,
       '\nYou can find a detailed guide on how to do this here: ',
-      '\nhttps://test.com/teiugasd'
+      '\nhttps://github.com/timstruthoff/generator-tawang/blob/master/docs/whitelist-guide/whitelist.md'
     );
     this.installDependencies({
       bower: false,
