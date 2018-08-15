@@ -6,13 +6,14 @@ const yosay = require('yosay');
 const isDomainName = require('is-domain-name');
 const generatePackageJson = require('./templates/generatePackageJson');
 const generateWebpackBase = require('./templates/generateWebpackBase');
+const ServerTest = require('./components/ServerTest');
 
-console.log(generateWebpackBase('test'));
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 module.exports = class extends Generator {
   prompting() {
     // Have Yeoman greet the user.
-    this.log(yosay(`Welcome to the majestic ${chalk.red('generator-tawang')} generator!`));
+    this.log(yosay(`Welcome to the majestic ${chalk.red('Tawang')} generator!`));
 
     const prompts = [
       {
@@ -50,18 +51,21 @@ module.exports = class extends Generator {
       message: 'This doesn\'t look like a domain name, do you want to use it anyways?'
     }
 
+    const ignoreFailedTest = {
+      type: 'confirm',
+      name: 'ignoreFailed',
+      message: 'Do you want to continue anyways?'
+    }
+
+    // Asks the user for a serverName
     const serverHostLoop = async () => {
       let serverHost = await this.prompt(serverHostQuestion);
-      console.log(JSON.stringify(serverHost))
       if (isDomainName(serverHost.serverHost)) {
-        console.log('\nVALID');
-        return;
+        return serverHost.serverHost;
       } else {
-        console.log('\nINVALID');
         let useInvalidPrompt = await this.prompt(useInvalidServerHostQuestion);
-        console.log('\nuseValid: ' + JSON.stringify(useInvalidPrompt));
         if (useInvalidPrompt.useInvalid) {
-          return
+          return serverHost.serverHost;
         } else {
           return serverHostLoop();
         }
@@ -69,27 +73,100 @@ module.exports = class extends Generator {
 
     }
 
-    const serverTestLoop = async () => {
-      console.log('testing')
-      return
+    /**
+     * Adds a green checkmark to the beginning of a string.
+     * @param {String} string 
+     * @return {String} The string with the checkmark.
+     */
+    const successLog = (string) => {
+      // Selecting a fallback checkmark if on windows.
+      let checkmark = process.platform === 'win32' ?  chalk.green('√') : chalk.green('✔');
+      return checkmark + ' ' + string
+    }
+
+    /**
+     * Adds a red cross to the beginning of a string.
+     * @param {String} string 
+     * @return {String} The string with the cross.
+     */
+    const errorLog = (string) => {
+      // Selecting a fallback checkmark if on windows.
+      let cross = process.platform === 'win32' ?  chalk.red('×') : chalk.red('✖');
+      return cross + ' ' + string
+    }
+    
+    /**
+     * Runs tests on a Tawang server async.
+     * @param {String} serverHost The serverHost to check
+     */
+    const serverTestLoop = async (serverHost) => {
+      this.log(chalk.bold(`\nTesting if the Tawang server at ${serverHost} is working.`));
+
+      let test = new ServerTest(serverHost);
+
+      // Checking get endpoint.
+      if (await test.checkDomain()) {
+
+        this.log(successLog('Server responded'))
+
+        // Checking source map Post endpoint.
+        if (await test.checkPost()) {
+
+          this.log(successLog('Posted source map successfully.'))
+
+          // Checking parse endpoint
+          if (await test.checkParse()) {
+            
+            // All tests were successful.
+            this.log(successLog('Parsed source map successfully.'))
+            this.log(chalk.green('All test completed successfully.\n'))
+            return;
+          } else {
+            this.log(errorLog('Parsing source map failed'));
+          }
+        } else {
+          this.log(errorLog('Posting source map failed'));
+        }
+      } else {
+        this.log(errorLog('Server test failed'));
+      }
+
+
+      this.log(chalk.bold.red(`The server at ${serverHost} doesn\'t seem to work!`));
+
+      // Displaying prompt if user wants to continue anyways.
+      let ignoreFailedPrompt = await this.prompt(ignoreFailedTest);
+      if (ignoreFailedPrompt.ignoreFailed) {
+        return;
+      } else {
+
+        // Displaying serverHost prompt and then testing again.
+        return await serverTestLoop(await serverHostLoop());
+      }
+
     }
 
     // Ask all input questions.
     return this.prompt(prompts).then(async props => {
       this.props = props;
-      await serverHostLoop();
-      return serverTestLoop();
+      let serverHost = await serverHostLoop();
+
+      return serverTestLoop(serverHost);
 
     });
   }
 
   writing() {
+
+    // Copying all static files
     this.fs.copy(this.templatePath('static'), this.destinationPath(''), {
       globOptions: { dot: true },
     });
 
+    // Copying the project file and renaming it according to the name.
     this.fs.copy(this.templatePath('tawang-starter.arproj'), this.destinationPath(`${this.props.name}.arproj`));
 
+    // Generating package.json file
     this.fs.writeJSON(
       this.destinationPath('package.json'),
       generatePackageJson({
@@ -100,7 +177,7 @@ module.exports = class extends Generator {
       }),
     );
 
-    console.log(generateWebpackBase);
+    // Generating the webpack.base.config.js file
     this.fs.write(
       this.destinationPath('tools/webpack/webpack.base.config.js'),
       generateWebpackBase({
@@ -110,6 +187,8 @@ module.exports = class extends Generator {
   }
 
   install() {
+
+    // Displaying information about whitelist.
     this.log(
       chalk.bold.green('\n\nImportant:'),
       `\nAfter I'm finished, please add "${
@@ -118,6 +197,8 @@ module.exports = class extends Generator {
       '\nYou can find a detailed guide on how to do this here: ',
       '\nhttps://github.com/timstruthoff/generator-tawang/blob/master/docs/whitelist-guide/whitelist.md'
     );
+
+    // Installing npm dependencies.
     this.installDependencies({
       bower: false,
       npm: true,

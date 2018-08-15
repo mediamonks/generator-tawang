@@ -19,9 +19,15 @@ module.exports = class {
    */
   async checkDomain() {
     let url = `https://${this.serverHost}`;
-    let response = await needle('get', url);
 
-    return response.body === 'ok';
+    try {
+      let response = await needle('get', url);
+      return response.body === 'ok';
+
+    } catch (error) {
+      return false;
+    }
+
   }
 
   /**
@@ -38,14 +44,18 @@ module.exports = class {
     // Assembling the data and sending to server.
     let data = { map: this.sourceMap.json };
     let options = { json: true };
-    let response = await needle('post', url, data, options);
-
-    // Inspecting the response for errors.
-    if (response.body) {
-      return response.body.id === this.sourceMap.hash;
-    } else {
+    try {
+      let response = await needle('post', url, data, options);
+      // Inspecting the response for errors.
+      if (response.body) {
+        return response.body.id === this.sourceMap.hash;
+      } else {
+        return false;
+      }
+    } catch (error) {
       return false;
     }
+
   }
 
   /**
@@ -67,14 +77,19 @@ module.exports = class {
     // Assembling the data and sending to server.
     let data = { errors: error };
     let options = { json: true };
-    let response = await needle('post', url, data, options);
-
-    // Inspecting the response for errors.
-    if (response.body) {
-      let resultObj = response.body[0];
-      return resultObj.line === 1 && resultObj.column === 6;
-    } else {
+    try {
+      let response = await needle('post', url, data, options);
+      
+      // Inspecting the response for errors.
+      if (response.body) {
+        let resultObj = response.body[0];
+        return resultObj.line === 1 && resultObj.column === 6;
+      } else {
+        return false;
+      }
+    } catch (error) {
       return false;
     }
+
   }
 };
