@@ -200,7 +200,7 @@ module.exports = class extends Generator {
         this.log(chalk.bold.red('\n\nImportant steps:\n'));
         this.log('Step 1:');
         this.log(
-          `When opening AR Studio for the first time, there will propably be an "Assets not found" error dialogue. In there you need to select the webpack output (in {project folder}/build/main.bundle.js) as the script file.`,
+          ` When opening AR Studio for the first time, there will probably be an "Assets not found" error dialogue. In there you need to select the webpack output (in {project folder}/build/main.bundle.js) as the script file.`,
         );
         this.log(
           '\nDetailed guide: ',
