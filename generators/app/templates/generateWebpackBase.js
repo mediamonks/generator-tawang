@@ -1,4 +1,4 @@
-module.exports = serverHost => `const path = require('path');
+module.exports = ({ serverHost }) => `const path = require('path');
 const Tawang = require('@mediamonks/tawang');
 
 module.exports = {
