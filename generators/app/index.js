@@ -204,7 +204,7 @@ module.exports = class extends Generator {
         );
         this.log(
           '\nDetailed guide: ',
-          '\nhttps://github.com/timstruthoff/generator-tawang/blob/master/docs/assets-missing-guide/assets-missing.md',
+          '\nhttps://github.com/mediamonks/generator-tawang/blob/master/docs/assets-missing-guide/assets-missing.md',
         );
         this.log('\n\nStep 2:');
         this.log(
