@@ -1,6 +1,6 @@
 {
   "name": "@mediamonks/generator-tawang",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Generate a Tawang project used for developing with webpack inside Facebook's AR Studio.",
   "publishConfig": {
     "access": "public"
