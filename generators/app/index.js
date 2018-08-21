@@ -191,45 +191,45 @@ module.exports = class extends Generator {
     this.installDependencies({
       bower: false,
       npm: true,
-    })
-      .then(async () => {
-        this.log('\nCompleted the npm install!');
-        this.log('Now building the initial version of the project in production mode.\n\n');
-      })
-      .then(webpackBuild)
-      .then(() => {
-        this.log(chalk.bold('All finished!'));
-        this.log(chalk.bold.red('\n\nImportant steps:\n'));
-        this.log('Step 1:');
-        this.log(
-          ` When opening AR Studio for the first time, there will probably be an "Assets not found" error dialogue. In there you need to select the webpack output (in {project folder}/build/main.bundle.js) as the script file.`,
-        );
-        this.log(
-          '\nDetailed guide: ',
-          '\nhttps://github.com/mediamonks/generator-tawang/blob/master/docs/assets-missing-guide/assets-missing.md',
-        );
-        this.log('\n\nStep 2:');
-        this.log(
-          `Please add "${
-            this.props.serverHost
-          }" to the whitelisted domains in the AR Studio project properties.`,
-        );
-        this.log(
-          '\nDetailed guide: ',
-          '\nhttps://github.com/timstruthoff/generator-tawang/blob/master/docs/whitelist-guide/whitelist.md',
-        );
+    });
+  }
 
-        this.log(chalk.bold.green('\n\nUse Tawang:\n'));
+  end() {
+    this.log('\nCompleted the npm install!');
+    this.log('Now building the initial version of the project in production mode.\n\n');
+    webpackBuild().then(() => {
+      this.log(chalk.bold('All finished!'));
+      this.log(chalk.bold.red('\n\nImportant steps:\n'));
+      this.log('Step 1:');
+      this.log(
+        ` When opening AR Studio for the first time, there will probably be an "Assets not found" error dialogue. In there you need to select the webpack output (in {project folder}/build/main.bundle.js) as the script file.`,
+      );
+      this.log(
+        '\nDetailed guide: ',
+        '\nhttps://github.com/mediamonks/generator-tawang/blob/master/docs/assets-missing-guide/assets-missing.md',
+      );
+      this.log('\n\nStep 2:');
+      this.log(
+        `Please add "${
+          this.props.serverHost
+        }" to the whitelisted domains in the AR Studio project properties.`,
+      );
+      this.log(
+        '\nDetailed guide: ',
+        '\nhttps://github.com/timstruthoff/generator-tawang/blob/master/docs/whitelist-guide/whitelist.md',
+      );
 
-        this.log('Commands:');
-        this.log(`${chalk.yellow('npm run dev')} Run the project in development mode.`);
-        this.log(`${chalk.yellow('npm run build')} Build the project for production.`);
+      this.log(chalk.bold.green('\n\nUse Tawang:\n'));
 
-        this.log(
-          `\nTo get the original position of an error manually, you can run ${chalk.yellow(
-            'dev.parse(line, column)',
-          )}\n`,
-        );
-      });
+      this.log('Commands:');
+      this.log(`${chalk.yellow('npm run dev')} Run the project in development mode.`);
+      this.log(`${chalk.yellow('npm run build')} Build the project for production.`);
+
+      this.log(
+        `\nTo get the original position of an error manually, you can run ${chalk.yellow(
+          'dev.parse(line, column)',
+        )}\n`,
+      );
+    });
   }
 };
