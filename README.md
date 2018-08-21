@@ -7,13 +7,13 @@ First, install [Yeoman](http://yeoman.io) and generator-tawang using [npm](https
 
 ```bash
 npm install -g yo
-npm install -g @mediamonks/generator-tawang
+npm install -g generator-tawang
 ```
 
 Then to generate a new project, run this command **inside** the project directory.
 
 ```bash
-yo @mediamonks/tawang
+yo tawang
 ```
 
 ## Getting To Know Yeoman
@@ -28,8 +28,8 @@ yo @mediamonks/tawang
 MIT © [Tim Struthoff](tst.works)
 
 
-[npm-image]: https://badge.fury.io/js/%40mediamonks%2Fgenerator-tawang.svg
-[npm-url]: https://www.npmjs.com/package/@mediamonks/generator-tawang
+[npm-image]: https://badge.fury.io/js/generator-tawang.svg
+[npm-url]: https://www.npmjs.com/package/generator-tawang
 [travis-image]: https://travis-ci.org/mediamonks/generator-tawang.svg?branch=master
 [travis-url]: https://travis-ci.org/mediamonks/generator-tawang
 [daviddm-image]: https://david-dm.org/mediamonks/generator-tawang.svg?theme=shields.io
