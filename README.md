@@ -28,9 +28,9 @@ yo @mediamonks/tawang
 MIT © [Tim Struthoff](tst.works)
 
 
-[npm-image]: https://badge.fury.io/js/generator-tawang.svg
-[npm-url]: https://npmjs.org/package/generator-tawang
-[travis-image]: https://travis-ci.org/timstruthoff/generator-tawang.svg?branch=master
-[travis-url]: https://travis-ci.org/timstruthoff/generator-tawang
-[daviddm-image]: https://david-dm.org/timstruthoff/generator-tawang.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/timstruthoff/generator-tawang
+[npm-image]: https://badge.fury.io/js/%40mediamonks%2Fgenerator-tawang.svg
+[npm-url]: https://www.npmjs.com/package/@mediamonks/generator-tawang
+[travis-image]: https://travis-ci.org/mediamonks/generator-tawang.svg?branch=master
+[travis-url]: https://travis-ci.org/mediamonks/generator-tawang
+[daviddm-image]: https://david-dm.org/mediamonks/generator-tawang.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/mediamonks/generator-tawang
