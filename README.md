@@ -16,6 +16,10 @@ Then to generate a new project, run this command **inside** the project director
 yo tawang
 ```
 
+## Getting started
+
+Read the Getting Started Guide [here](https://github.com/mediamonks/generator-tawang/blob/master/docs/getting-started/getting-started.md).
+
 ## Getting To Know Yeoman
 
  * Yeoman has a heart of gold.
