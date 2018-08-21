@@ -43,7 +43,9 @@ module.exports = class extends Generator {
     const serverHostQuestion = {
       type: 'input',
       name: 'serverHost',
-      message: 'Tawang Server Hostname',
+      message: `Tawang Server Hostname ${chalk.reset(
+        `(example: ${chalk.italic('api.example.com')})`,
+      )}`,
     };
 
     const useInvalidServerHostQuestion = {
@@ -55,7 +57,9 @@ module.exports = class extends Generator {
     const ignoreFailedTest = {
       type: 'confirm',
       name: 'ignoreFailed',
-      message: 'Do you want to continue anyways?',
+      message: `Do you want to continue anyways? ${chalk.red.bold(
+        '\nNote: Tawang will NOT work without an API server!',
+      )}`,
     };
 
     // Asks the user for a serverName
@@ -194,8 +198,6 @@ module.exports = class extends Generator {
       })
       .then(webpackBuild)
       .then(() => {
-        
-
         this.log(chalk.bold('All finished!'));
         this.log(chalk.bold.red('\n\nImportant steps:\n'));
         this.log('Step 1:');
