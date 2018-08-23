@@ -10,15 +10,10 @@ npm install -g yo
 npm install -g generator-tawang
 ```
 
-Then to generate a new project, run this command **inside** the project directory.
-
-```bash
-yo tawang
-```
-
 ## Getting started
 
-Read the Getting Started Guide [here](https://github.com/mediamonks/generator-tawang/blob/master/docs/getting-started/getting-started.md).
+To setup a project, you first have to setup an empty AR Studio project and configure it for working with AR Studio.
+You can read how to do this in the Getting Started Guide [here](https://github.com/mediamonks/generator-tawang/blob/master/docs/getting-started/getting-started.md).
 
 ## Getting To Know Yeoman
 
